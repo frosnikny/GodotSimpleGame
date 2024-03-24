@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=3 uid="uid://bil8kw8c37iw"]
+
+[ext_resource type="Texture2D" uid="uid://ikin78xiicsb" path="res://Assets/skeleton_sword/corpse_1.png" id="1_uwymy"]
+[ext_resource type="Script" path="res://Mobs/skeleton_corpse.gd" id="1_wwu07"]
+[ext_resource type="Texture2D" uid="uid://cctoerig4gh18" path="res://Assets/skeleton_sword/corpse_2.png" id="2_lphb5"]
+[ext_resource type="Texture2D" uid="uid://duwgnkd1r2fcf" path="res://Assets/skeleton_sword/reborn_1.png" id="3_iw01n"]
+[ext_resource type="Texture2D" uid="uid://chkl7p027lqun" path="res://Assets/skeleton_sword/reborn_2.png" id="4_58ajs"]
+[ext_resource type="Texture2D" uid="uid://ginjwinf40if" path="res://Assets/skeleton_sword/reborn_3.png" id="5_7niqk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4i3bt"]
+size = Vector2(88, 122)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3ro0f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uwymy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lphb5")
+}],
+"loop": true,
+"name": &"Generation 1_1",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uwymy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lphb5")
+}],
+"loop": true,
+"name": &"Generation 1_2",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uwymy")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uwymy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lphb5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_iw01n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_58ajs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7niqk")
+}],
+"loop": false,
+"name": &"Reborn",
+"speed": 6.0
+}]
+
+[node name="SkeletonCorpseSpawner" type="Node2D"]
+
+[node name="SkeletonCorpse" type="Area2D" parent="."]
+script = ExtResource("1_wwu07")
+
+[node name="GenerationTimer" type="Timer" parent="SkeletonCorpse"]
+wait_time = 3.0
+
+[node name="RebornPartTimer" type="Timer" parent="SkeletonCorpse"]
+wait_time = 2.0
+
+[node name="RebornEndTimer" type="Timer" parent="SkeletonCorpse"]
+wait_time = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SkeletonCorpse"]
+shape = SubResource("RectangleShape2D_4i3bt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SkeletonCorpse"]
+position = Vector2(0, -4)
+scale = Vector2(3.6, 3.6)
+sprite_frames = SubResource("SpriteFrames_3ro0f")
+animation = &"Idle"
+autoplay = "Idle"
+
+[connection signal="timeout" from="SkeletonCorpse/GenerationTimer" to="SkeletonCorpse" method="_on_generation_timer_timeout"]
+[connection signal="timeout" from="SkeletonCorpse/RebornPartTimer" to="SkeletonCorpse" method="_on_reborn_part_timer_timeout"]
+[connection signal="timeout" from="SkeletonCorpse/RebornEndTimer" to="SkeletonCorpse" method="_on_reborn_end_timer_timeout"]
